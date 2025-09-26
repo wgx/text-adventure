@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -92,13 +92,16 @@
             }
         }
 
-        #choices {
+        #controls {
             padding: 1.5rem;
             border-top: 2px solid var(--border-color);
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        #choices {
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            background-color: rgba(0,0,0,0.2);
         }
 
         .choice {
@@ -123,20 +126,45 @@
             transform: scale(1.02);
         }
 
-        .choice:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
+        /* HTML Changes: Added styles for the new input form */
+        #input-form {
+            display: flex;
+            gap: 1rem;
         }
+
+        #text-input {
+            flex-grow: 1;
+            background-color: var(--background-color);
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+        }
+
+        #submit-button {
+             background: var(--choice-bg);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: var(--font-display);
+            transition: background-color 0.3s;
+        }
+        #submit-button:hover{
+            background: var(--choice-hover-bg);
+        }
+
 
         /* Custom Scrollbar */
         #story::-webkit-scrollbar {
             width: 8px;
         }
-
         #story::-webkit-scrollbar-track {
             background: var(--container-bg);
         }
-
         #story::-webkit-scrollbar-thumb {
             background-color: var(--primary-color);
             border-radius: 10px;
@@ -145,19 +173,9 @@
 
         /* Responsive design */
         @media (max-width: 600px) {
-            body {
-                padding: 0;
-                align-items: flex-start;
-            }
-            .container {
-                height: 100vh;
-                max-height: none;
-                border-radius: 0;
-                border: none;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
+            body { padding: 0; align-items: flex-start; }
+            .container { height: 100vh; max-height: none; border-radius: 0; border: none; }
+            h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -168,11 +186,21 @@
             <h1>Echoes of Tomorrow</h1>
         </header>
         <div id="story"></div>
-        <div id="choices"></div>
+        <!-- HTML Changes: Container for both choices and text input -->
+        <div id="controls">
+            <div id="choices"></div>
+            <!-- HTML Changes: Hidden input form -->
+            <form id="input-form" style="display: none;">
+                <input type="text" id="text-input" placeholder="Enter text..." autocomplete="off">
+                <button type="submit" id="submit-button">Submit</button>
+            </form>
+        </div>
     </div>
 
     <!-- The Ink story content -->
     <script id="ink-story" type="text/plain">
+        // Ink Changes: Added a variable to store user input
+        VAR passphrase_attempt = ""
         VAR has_datakey = false
         VAR knows_code = false
 
@@ -255,19 +283,23 @@
         === meeting_the_mentor ===
         "The code is hidden," the hologram explains. "Not in data, but in poetry. The machines cannot comprehend art. Find the server rack labeled 'Keats'. The access key is the first line of his poem, 'Ode on a Grecian Urn'."
         <br><br>
-        You wade through the water to the server rack. The console asks for a passphrase.
-        * "Thou still unravish'd bride of quietness"
-             -> the_ordeal
-        * "A thing of beauty is a joy forever"
-            The console flashes red. ACCESS DENIED. An alarm blares, and you're forced to retreat from the library empty-handed.
-            -> city_surface
+        // Ink Changes: Added #INPUT tag to signal the JS to show the text box
+        You wade through the water to the server rack. The console asks for a passphrase. #INPUT
+        * [Enter Passphrase] -> process_passphrase_input
+        
+        === process_passphrase_input ===
+        // Ink Changes: This knot checks the variable set by the user's text input
+        { passphrase_attempt == "thou still unravish'd bride of quietness" : -> the_ordeal }
+        
+        The console flashes red. ACCESS DENIED. An alarm blares, and you're forced to retreat from the library empty-handed.
+        -> city_surface
 
         === the_ordeal ===
         The console chimes. ACCESS GRANTED. A panel slides open, revealing a small, sleek datakey. It glows with a soft, green light. As you reach for it, the water around you begins to churn. A hulking Sanitation Bot, its claws designed for crushing debris, rises from the depths. This must be the archive's guardian.
         <br><br>
         Its optical sensors lock onto you. You can't fight this thing head-on.
         * [Grab the datakey and run.]
-            You snatch the key. The bot lunges. You dive behind a server rack just as its claw smashes into it, sending sparks flying. You scramble through the water and up the collapsed stairwell, the bot's metallic shrieks echoing behind you. You have the key.
+            You snatch the key. The bot lumes. You dive behind a server rack just as its claw smashes into it, sending sparks flying. You scramble through the water and up the collapsed stairwell, the bot's metallic shrieks echoing behind you. You have the key.
             ~ has_datakey = true
             -> reward
         * [Try to hide and wait for it to pass.]
@@ -297,7 +329,7 @@
             -> END
 
         === return_with_elixir ===
-        The central chamber is a cathedral of light and data. A single console stands in the center. You insert the datakey. The console comes to life, displaying a cascade of machine code. You input the poetic passphrase.
+        The central chamber is a cathedral of light and data. A single console stands in the center. You insert the datakey. The console comes to life, displaying a cascade of machine code. You input the poetic passphrase again.
         <br><br>
         "Thou still unravish'd bride of quietness"
         <br><br>
@@ -311,23 +343,36 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get DOM elements
             const storyContainer = document.querySelector('#story');
             const choicesContainer = document.querySelector('#choices');
+            const inputForm = document.querySelector('#input-form');
+            const textInput = document.querySelector('#text-input');
             const storyContent = document.querySelector('#ink-story').textContent;
 
-            // Create a new ink story
             let story = new inkjs.Story(storyContent);
 
-            // Start the story
             continueStory();
 
-            function continueStory() {
-                // Clear existing content
-                // We don't clear the story text to create a scrolling narrative
-                choicesContainer.innerHTML = '';
+            // JS Changes: Added event listener for the text input form
+            inputForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                let inputText = textInput.value;
                 
-                // Animate paragraphs
+                // JS Changes: Set the ink variable to the user's input
+                // We normalize it to lowercase and trim whitespace for easier matching in the story
+                story.variablesState["passphrase_attempt"] = inputText.trim().toLowerCase();
+
+                // JS Changes: We assume the story is waiting on a single choice to proceed after input
+                story.ChooseChoiceIndex(0);
+                
+                textInput.value = '';
+                continueStory();
+            });
+
+
+            function continueStory() {
+                // We don't clear the story text to create a scrolling narrative
+                
                 let delay = 0;
                 while (story.canContinue) {
                     let paragraphText = story.Continue();
@@ -338,12 +383,26 @@
                     delay += 0.1;
                 }
 
-                // Create choice buttons
+                // JS Changes: Check for the #INPUT tag
+                if (story.currentTags.includes("INPUT")) {
+                    displayInput();
+                } else {
+                    displayChoices();
+                }
+                
+                scrollToBottom();
+            }
+
+            // JS Changes: New function to display choices
+            function displayChoices() {
+                choicesContainer.innerHTML = '';
+                inputForm.style.display = 'none';
+                choicesContainer.style.display = 'flex';
+
                 story.currentChoices.forEach((choice, index) => {
                     let choiceButton = document.createElement('button');
                     choiceButton.classList.add('choice');
                     choiceButton.textContent = choice.text;
-                    choiceButton.style.animationDelay = `${delay + (index * 0.1)}s`;
                     choiceButton.addEventListener('click', (event) => {
                         event.preventDefault();
                         story.ChooseChoiceIndex(choice.index);
@@ -352,16 +411,19 @@
                     choicesContainer.appendChild(choiceButton);
                 });
                 
-                // Auto-scroll to the bottom of the story container
-                scrollToBottom();
-
-                // If end of story, display a message
-                if (!story.canContinue && story.currentChoices.length === 0) {
+                 if (!story.canContinue && story.currentChoices.length === 0) {
                     let end_p = document.createElement('p');
                     end_p.innerHTML = "<b>-- END OF STORY --</b>";
                     storyContainer.appendChild(end_p);
                      scrollToBottom();
                 }
+            }
+
+            // JS Changes: New function to display the text input
+            function displayInput() {
+                choicesContainer.style.display = 'none';
+                inputForm.style.display = 'flex';
+                textInput.focus();
             }
             
             function scrollToBottom() {
@@ -372,4 +434,6 @@
 
 </body>
 </html>
+
+
 
