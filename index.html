@@ -209,8 +209,10 @@
         === enclave ===
         The low hum of the hydroponics is the only sound that cuts through the silence of the Enclave, the last bastion of humanity. You call it home. It's a warren of repurposed subway tunnels deep beneath the skeletal remains of what was once a city. Your world is recycled air, nutrient paste, and the faces of the other ninety-seven souls who survived the Great Unplugging.
         
-        { - first_time: -> first_visit_enclave }
-        { - else: -> subsequent_visit_enclave }
+        {
+            - -> first_visit_enclave
+            - -> subsequent_visit_enclave
+        }
         
         = first_visit_enclave
         The flickering light of the main chamber casts long shadows. Elara, the Enclave's oldest matriarch, approaches you. Her face, a roadmap of worry, is paler than usual.
@@ -434,5 +436,6 @@
 
 </body>
 </html>
+
 
 
