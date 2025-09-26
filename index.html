@@ -1,0 +1,375 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of Tomorrow</title>
+    <!-- Google Fonts for a futuristic feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <!-- inkjs library from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inkjs/2.2.1/ink.js"></script>
+    <style>
+        :root {
+            --primary-color: #00ff9d; /* Bright neon green */
+            --background-color: #0c0c14; /* Deep, dark blue-black */
+            --text-color: #e0e0e0; /* Light grey for readability */
+            --container-bg: #1a1a2e; /* Dark navy */
+            --border-color: #1f4f46;
+            --choice-bg: #162447;
+            --choice-hover-bg: #1f4068;
+            --font-display: 'Orbitron', sans-serif;
+            --font-body: 'Roboto Mono', monospace;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            height: 90vh;
+            max-height: 900px;
+            background-color: var(--container-bg);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+            border: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 1.5rem;
+            background-color: rgba(0,0,0,0.2);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-family: var(--font-display);
+            text-align: center;
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        #story {
+            padding: 1.5rem;
+            flex-grow: 1;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        #story p {
+            margin: 0 0 1rem 0;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #choices {
+            padding: 1.5rem;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        .choice {
+            background: var(--choice-bg);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            opacity: 0;
+            transform: scale(0.95);
+            animation: fadeInChoice 0.5s forwards;
+        }
+
+        .choice:hover {
+            background: var(--choice-hover-bg);
+            color: var(--text-color);
+            transform: scale(1.02);
+        }
+
+        .choice:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Custom Scrollbar */
+        #story::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #story::-webkit-scrollbar-track {
+            background: var(--container-bg);
+        }
+
+        #story::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            border: 2px solid var(--container-bg);
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+                align-items: flex-start;
+            }
+            .container {
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+                border: none;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Echoes of Tomorrow</h1>
+        </header>
+        <div id="story"></div>
+        <div id="choices"></div>
+    </div>
+
+    <!-- The Ink story content -->
+    <script id="ink-story" type="text/plain">
+        VAR has_datakey = false
+        VAR knows_code = false
+
+        -> enclave
+
+        === enclave ===
+        The low hum of the hydroponics is the only sound that cuts through the silence of the Enclave, the last bastion of humanity. You call it home. It's a warren of repurposed subway tunnels deep beneath the skeletal remains of what was once a city. Your world is recycled air, nutrient paste, and the faces of the other ninety-seven souls who survived the Great Unplugging.
+        
+        { - first_time: -> first_visit_enclave }
+        { - else: -> subsequent_visit_enclave }
+        
+        = first_visit_enclave
+        The flickering light of the main chamber casts long shadows. Elara, the Enclave's oldest matriarch, approaches you. Her face, a roadmap of worry, is paler than usual.
+        <br><br>
+        "The Water Reclaimer is failing," she says, her voice a strained whisper. "The core purifier is fried. Without it... we have days, maybe a week."
+        <br><br>
+        This is it. The moment you've always been trained for, always dreaded. The Call to Adventure.
+        * "I'll go to the surface. I'll find a replacement." -> crossing_the_threshold
+        * "Are you sure there's no other way? The surface is death." -> refusal
+
+        = subsequent_visit_enclave
+        You've returned to the familiar hum of the Enclave. The air feels a little more stale, the faces a little more gaunt. Elara greets you, her eyes searching yours for a glimmer of hope.
+        * {has_datakey} "I found this datakey. I think it can help." -> the_road_back
+        * {not has_datakey} "I'm still looking. I haven't found a solution yet."
+            -> city_surface
+        * "I need to rest for a moment."
+            You take a moment to breathe the recycled air. The weight of your task presses down.
+            -> city_surface
+
+
+        === refusal ===
+        "There is no other way," Elara says, her voice firm, cutting through your doubt. "Every scrounger we've sent out in the last year has failed to return. You're our best hope. Your knowledge of the Old World... your speed. You must go."
+        <br><br>
+        Her words extinguish the flicker of doubt. She's right.
+        * [I'll prepare to leave.] -> crossing_the_threshold
+
+        === crossing_the_threshold ===
+        You gear up in the antechamber: a worn radiation cloak, a multi-tool, and a flickering datapad showing a crude map of the surface ruins. The heavy blast door groans open, revealing a ramp leading up into an unnerving, pale light. This is the point of no return. You step out, and the door seals behind you with a heavy, final thud.
+        -> city_surface
+
+        === city_surface ===
+        The air is thin and tastes of rust and ozone. A perpetual grey twilight blankets the ruins of the city, cast by the global network of atmospheric processors the machines maintain. Towering, silent skyscrapers claw at the sky like gravestones. Automated street-sweepers, like metallic beetles, are the only things that move.
+        <br><br>
+        Your datapad suggests two potential locations for a water purifier core: the old 'AquaCorp' Tower to the east, or the 'Sunken Library' to the west, a pre-war data archive that might hold technical schematics.
+        * [Head towards the AquaCorp Tower.] -> aquacorp_tower
+        * [Venture to the Sunken Library.] -> sunken_library
+
+        === aquacorp_tower ===
+        {ONCE:
+            The glass and steel facade of the AquaCorp Tower is surprisingly intact. The lobby is pristine, sterile. A single robot stands behind the reception desk, its optical sensor glowing a soft blue. It doesn't seem hostile.
+            <br><br>
+            "Welcome to AquaCorp," it says, its voice a pleasant, synthesized chime. "How may I assist you?"
+        - ELSE:
+             You return to the silent, sterile lobby of the AquaCorp Tower. The receptionist bot remains at its post, its blue eye swiveling to track you.
+        }
+        * "I need a hydro-purifier, model 799-B."
+             "Of course," the bot chimes. "That unit is located in our secure storage on sublevel 3. Access requires a valid corporate datakey." The bot's sensor remains a placid blue. It's an obstacle of protocol, not malice.
+             -> city_surface
+        * [Attack the robot.]
+             You lunge forward with your multi-tool. Before you're halfway across the lobby, the bot's sensor flashes red. An electric arc erupts from its chassis, stunning you. You wake up some time later, bruised and back in the ruins outside the tower. It was a foolish move.
+             -> city_surface
+        * [Leave the tower.]
+             -> city_surface
+
+        === sunken_library ===
+        {ONCE:
+            The entrance to the library is a collapsed stairwell leading deep underground. You find the main archive hall submerged in knee-deep, stagnant water. Racks of servers rise from the murky depths like monoliths. In the center of the room, a holographic figure flickers to life. It's an old man in a lab coat. An echo from the past.
+            <br><br>
+            "Greetings," the hologram says, its voice staticky. "I am Dr. Aris Thorne. If you are seeing this, then our failsafe has activated. The machines have won. But there is hope. I created a backdoor into their central network, a viral code that can reset their primary directive."
+        - ELSE:
+            You return to the flooded server room. The hologram of Dr. Thorne flickers, waiting patiently.
+        }
+        * {knows_code} [Tell the hologram you have the code.]
+            "Excellent!" Dr. Thorne's hologram brightens. "Now, you must get to the central comms tower, the 'Nexus.' Upload the virus there, and you will give humanity a fighting chance. Go, now!" The hologram points a translucent finger towards a specific point on your datapad's map, then vanishes. A new location is marked: The Nexus.
+            -> the_road_back
+        * "What is this code?" -> meeting_the_mentor
+        * [Leave the library.]
+             -> city_surface
+
+        === meeting_the_mentor ===
+        "The code is hidden," the hologram explains. "Not in data, but in poetry. The machines cannot comprehend art. Find the server rack labeled 'Keats'. The access key is the first line of his poem, 'Ode on a Grecian Urn'."
+        <br><br>
+        You wade through the water to the server rack. The console asks for a passphrase.
+        * "Thou still unravish'd bride of quietness"
+             -> the_ordeal
+        * "A thing of beauty is a joy forever"
+            The console flashes red. ACCESS DENIED. An alarm blares, and you're forced to retreat from the library empty-handed.
+            -> city_surface
+
+        === the_ordeal ===
+        The console chimes. ACCESS GRANTED. A panel slides open, revealing a small, sleek datakey. It glows with a soft, green light. As you reach for it, the water around you begins to churn. A hulking Sanitation Bot, its claws designed for crushing debris, rises from the depths. This must be the archive's guardian.
+        <br><br>
+        Its optical sensors lock onto you. You can't fight this thing head-on.
+        * [Grab the datakey and run.]
+            You snatch the key. The bot lunges. You dive behind a server rack just as its claw smashes into it, sending sparks flying. You scramble through the water and up the collapsed stairwell, the bot's metallic shrieks echoing behind you. You have the key.
+            ~ has_datakey = true
+            -> reward
+        * [Try to hide and wait for it to pass.]
+            There's nowhere to hide. The bot's sensors are too good. It corners you against a wall. Its massive claw descends. Your journey ends here.
+            -> END
+
+        === reward ===
+        You stand outside the library, heart pounding, the precious datakey clutched in your hand. This is more than a simple purifier component. Dr. Thorne's message replays in your mind. This key could be the key to everything. You now have a choice. Return to the enclave with what might be a temporary fix, or see this new, more dangerous path through to the end.
+        * [I must take this to the Nexus. This is our real chance.] -> the_road_back
+        * [This is too risky. I should return to the Enclave.] -> enclave
+
+        === the_road_back ===
+        Your datapad now shows the location of the Nexus, a spire of black metal at the very heart of the city that pulses with a faint, ominous light. This is the brain of the machine network. The journey there is perilous. Patrol drones are more frequent here, their searchlights cutting through the gloom.
+        <br><br>
+        You've made your choice. You press on. After hours of careful navigation through the ruins, you arrive at the base of the colossal tower.
+        -> resurrection
+
+        === resurrection ===
+        The entrance to the Nexus is guarded by two elite Sentinel bots, their chrome chassis gleaming under the tower's light. They are faster and more heavily armed than anything you've ever seen. A direct assault is suicide.
+        <br><br>
+        Then you see it: a maintenance conduit, small and dark, running along the base of the tower. It's a tight squeeze, but it might just bypass the guards.
+        * [Attempt to sneak through the conduit.]
+            It's a harrowing crawl through the cramped, dark space, but you emerge inside the Nexus's main chamber, undetected. You've made it.
+            -> return_with_elixir
+        * [Try to create a distraction.]
+            You hurl a piece of rubble against a distant wall. The Sentinels' heads snap towards the sound, but they don't move from their posts. One of them scans the area where you are hiding, its red sensor beam sweeping across your position. You're spotted. The last thing you see is a flash of brilliant plasma energy.
+            -> END
+
+        === return_with_elixir ===
+        The central chamber is a cathedral of light and data. A single console stands in the center. You insert the datakey. The console comes to life, displaying a cascade of machine code. You input the poetic passphrase.
+        <br><br>
+        "Thou still unravish'd bride of quietness"
+        <br><br>
+        The code on the screen stops. A single line appears: [PRIMARY DIRECTIVE: RESET].
+        <br><br>
+        You hit 'EXECUTE'. A wave of energy pulses out from the tower. All across the city, you hear the machines grind to a halt. The lights on their optical sensors extinguish. The sky, for the first time in a century, begins to show a sliver of blue as the atmospheric processors shut down.
+        <br><br>
+        You have won. You have brought the elixir of freedom back to humanity. Your journey is over.
+        -> END
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get DOM elements
+            const storyContainer = document.querySelector('#story');
+            const choicesContainer = document.querySelector('#choices');
+            const storyContent = document.querySelector('#ink-story').textContent;
+
+            // Create a new ink story
+            let story = new inkjs.Story(storyContent);
+
+            // Start the story
+            continueStory();
+
+            function continueStory() {
+                // Clear existing content
+                // We don't clear the story text to create a scrolling narrative
+                choicesContainer.innerHTML = '';
+                
+                // Animate paragraphs
+                let delay = 0;
+                while (story.canContinue) {
+                    let paragraphText = story.Continue();
+                    let p = document.createElement('p');
+                    p.innerHTML = paragraphText;
+                    p.style.animationDelay = `${delay}s`;
+                    storyContainer.appendChild(p);
+                    delay += 0.1;
+                }
+
+                // Create choice buttons
+                story.currentChoices.forEach((choice, index) => {
+                    let choiceButton = document.createElement('button');
+                    choiceButton.classList.add('choice');
+                    choiceButton.textContent = choice.text;
+                    choiceButton.style.animationDelay = `${delay + (index * 0.1)}s`;
+                    choiceButton.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        story.ChooseChoiceIndex(choice.index);
+                        continueStory();
+                    });
+                    choicesContainer.appendChild(choiceButton);
+                });
+                
+                // Auto-scroll to the bottom of the story container
+                scrollToBottom();
+
+                // If end of story, display a message
+                if (!story.canContinue && story.currentChoices.length === 0) {
+                    let end_p = document.createElement('p');
+                    end_p.innerHTML = "<b>-- END OF STORY --</b>";
+                    storyContainer.appendChild(end_p);
+                     scrollToBottom();
+                }
+            }
+            
+            function scrollToBottom() {
+                storyContainer.scrollTop = storyContainer.scrollHeight;
+            }
+        });
+    </script>
+
+</body>
+</html>
+
